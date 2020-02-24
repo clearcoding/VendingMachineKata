@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Muscle.Vending", "Muscle.Vending\Muscle.Vending.csproj", "{916F9627-6D98-441F-84CE-5D93F90DE0A7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Muscle.Vending.Tests", "Muscle.Vending.Tests\Muscle.Vending.Tests.csproj", "{2DB99E1F-425D-466F-8F1C-1DC6D3C04819}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{916F9627-6D98-441F-84CE-5D93F90DE0A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{916F9627-6D98-441F-84CE-5D93F90DE0A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{916F9627-6D98-441F-84CE-5D93F90DE0A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{916F9627-6D98-441F-84CE-5D93F90DE0A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2DB99E1F-425D-466F-8F1C-1DC6D3C04819}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DB99E1F-425D-466F-8F1C-1DC6D3C04819}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DB99E1F-425D-466F-8F1C-1DC6D3C04819}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DB99E1F-425D-466F-8F1C-1DC6D3C04819}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
