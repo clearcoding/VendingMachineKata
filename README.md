@@ -1,6 +1,6 @@
 #Vending Machine Kata
 
-The following is an implementation of the vending machine kata in c#
+The following is an implementation of the vending machine kata in c-sharp
 
 Prerequesistes:
 ```dotnet sdk 3.1```
