@@ -19,8 +19,6 @@ namespace Muscle.Vending
             _currencyService = currencyService;
             _productRepository = productRepository;
             _currentDisplay = VendingResponse.InsertedCoin;
-            InsertedCoins = new List<ICoin>();
-            
         }
 
         public string CurrentDisplay
@@ -36,7 +34,7 @@ namespace Muscle.Vending
                 }
                 else
                 {
-                    if (!_currencyService.AvailableChange.Any() && _currentDisplay.Equals(VendingResponse.InsertedCoin))
+                    if ((_currencyService.AvailableChange.Count == 0) && _currentDisplay.Equals(VendingResponse.InsertedCoin))
                         _currentDisplay = VendingResponse.ExactChangeOnly;
                     message = _currentDisplay;
                 }
@@ -50,8 +48,13 @@ namespace Muscle.Vending
         public IList<ICoin> ReturnSlot { get; private set; }
         public Product DispensedProduct { get; private set; }
 
-        private IList<ICoin> InsertedCoins { get; set; }
+        private IList<ICoin> InsertedCoins
+        {
+            get => _currencyService.InsertedCoins;
+        }
 
+        
+        
         public void InsertCoin(ICoin coin)
         {
             var result = _currencyService.IsAccepted(coin);
@@ -59,7 +62,7 @@ namespace Muscle.Vending
             if (result)
             {
                 _currentDisplay = VendingResponse.Accepted;
-                InsertedCoins.Add(coin);
+                _currencyService.InsertCoin(coin);
                 return;
             }
 
@@ -91,7 +94,7 @@ namespace Muscle.Vending
                         DispensedProduct = selectedProduct;
                         _singleUseDisplay = VendingResponse.ThankYou;
                         _currentDisplay = VendingResponse.InsertedCoin;
-                        ReturnSlot = _currencyService.CalculcateChangeCoins(selectedProduct.Price - CurrentAmount);
+                        ReturnSlot = _currencyService.CalculateChangeCoins(selectedProduct.Price - CurrentAmount);
                         return;
                 }
                 _singleUseDisplay= VendingResponse.Price;

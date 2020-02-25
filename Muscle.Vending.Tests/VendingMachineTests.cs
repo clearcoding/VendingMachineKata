@@ -28,8 +28,8 @@ namespace Muscle.Vending.Tests
                  new Product(){Name = "Cola"}
              };
              _mockProductRepo.SetupGet(p => p.Products).Returns(products);
-             _mockUsCurrencyService.SetupGet(s => s.AvailableChange).Returns(new List<ICoin>());
-
+             _mockUsCurrencyService.SetupGet(s => s.AvailableChange)
+                 .Returns(new List<ICoin>() {new Coin(USCoinTypes.Dime)});
              _vendingMachine  = new VendingMachine(_mockUsCurrencyService.Object,_mockProductRepo.Object);
 
         }
@@ -37,7 +37,7 @@ namespace Muscle.Vending.Tests
         [Fact]
         public void GivenNoCoinsInserted_WhenViewed_ThenCurrentDisplayIsInsertCoin()
         {
-            Assert.Equal(VendingResponse.InsertedCoin,_vendingMachine.CurrentDisplay);
+            _vendingMachine.CurrentDisplay.Should().Be(VendingResponse.InsertedCoin);
         }
 
         [Fact]
@@ -46,21 +46,22 @@ namespace Muscle.Vending.Tests
             var coin = new Coin(USCoinTypes.Dime);
             _mockUsCurrencyService.Setup(s => s.IsAccepted(It.IsAny<ICoin>())).Returns(true);
             _vendingMachine.InsertCoin(coin);    
-            Assert.Equal(VendingResponse.Accepted,_vendingMachine.CurrentDisplay);
+            _vendingMachine.CurrentDisplay.Should().Be(VendingResponse.Accepted);
         }
         [Fact] 
         public void GivenAValidCoin_WhenItIsInserted_ThenTheDisplayedCurrentAmountIsCorrect()
         {
             var coin = new Coin(USCoinTypes.Dime);
             _mockUsCurrencyService.Setup(s => s.IsAccepted(It.IsAny<ICoin>())).Returns(true);
-            _vendingMachine.InsertCoin(coin); 
-            Assert.Equal(coin.Value,_vendingMachine.CurrentAmount);
-   
+            _mockUsCurrencyService.SetupGet(s => s.InsertedCoins).Returns(new List<ICoin>(){coin});
+
+            _vendingMachine.InsertCoin(coin);
+            _vendingMachine.CurrentAmount.Should().Be(coin.Value);
+
         }
 
-
         [Fact] 
-        public void GivenAnInvalidCoin_WhenItIsInserted_ThenTheCurrentDisplayIsInserCoin()
+        public void GivenAnInvalidCoin_WhenItIsInserted_ThenTheCurrentDisplayIsInsertCoin()
         {
             var coin = new Coin(USCoinTypes.Penny);
             _mockUsCurrencyService.Setup(s => s.IsAccepted(It.IsAny<ICoin>())).Returns(false);
@@ -76,19 +77,23 @@ namespace Muscle.Vending.Tests
             
             Assert.Same(coin, _vendingMachine.ReturnSlot.Single());
         }
-
-        [Fact]
-        public void GivenTheUserHasInsertedTheCorrectMoney_WhenTheySelectProduct_ThenTheProductIsDispensedAndThankYouDisplayed()
+        public static IEnumerable<object[]> SelectProductData =>
+            new List<object[]>
+            {
+                new object[] { new List<Product>(){new Product() {Name = ProductTypes.Cola, Price = 0.25m,AvailableStock = 1}},new List<ICoin>(){new Coin(USCoinTypes.Quarter)},ProductTypes.Cola},
+            };
+        [Theory]
+        [MemberData(nameof (SelectProductData))]
+        public void GivenTheUserHasInsertedTheCorrectMoney_WhenTheySelectProduct_ThenTheProductIsDispensedAndThankYouDisplayed(IList<Product> products,IList<ICoin> insertedCoins,string productType)
         {
             
-            IList<Product> products = new List<Product>(){new Product(){Name = ProductTypes.Cola,Price = 0.25m,AvailableStock = 1}};
             _mockUsCurrencyService.Setup(s => s.IsAccepted(It.IsAny<ICoin>())).Returns(true);
+            _mockUsCurrencyService.SetupGet(g => g.InsertedCoins).Returns(insertedCoins);
             _mockProductRepo.Setup(s => s.Products).Returns(products);
+            _mockUsCurrencyService.SetupGet(g => g.InsertedCoins).Returns(insertedCoins);
+            _vendingMachine.BuyProduct(productType);
             
-            _vendingMachine.InsertCoin(new Coin(USCoinTypes.Quarter));
-            _vendingMachine.BuyProduct(ProductTypes.Cola);
-            
-            _vendingMachine.DispensedProduct.Name.Should().Be(ProductTypes.Cola);
+            _vendingMachine.DispensedProduct.Name.Should().Be(productType);
             _vendingMachine.CurrentDisplay.Should().Be(VendingResponse.ThankYou);
             _vendingMachine.CurrentDisplay.Should().Be(VendingResponse.InsertedCoin);
 
@@ -100,16 +105,34 @@ namespace Muscle.Vending.Tests
             IList<Product> products = new List<Product>(){product};
             _mockUsCurrencyService.Setup(s => s.IsAccepted(It.IsAny<ICoin>())).Returns(true);
             _mockProductRepo.Setup(s => s.Products).Returns(products);
-            var coin = new Coin(USCoinTypes.Penny); 
-            _vendingMachine.InsertCoin(coin);
+            var coins = new List<ICoin>(){new Coin(USCoinTypes.Penny)}; 
+            _mockUsCurrencyService.SetupGet(g => g.InsertedCoins).Returns(coins);
+
             _vendingMachine.BuyProduct(ProductTypes.Cola);
             
             _vendingMachine.DispensedProduct.Should().BeNull();
             _vendingMachine.CurrentDisplay.Should().Be(VendingResponse.Price);
-            _vendingMachine.CurrentDisplay.Should().Be((coin.Value).ToString(CultureInfo.InvariantCulture));
+            _vendingMachine.CurrentDisplay.Should().Be((coins.Sum(s=>s.Value)).ToString(CultureInfo.InvariantCulture));
 
         }
+        [Fact]
+        public void GivenTheUserHasNotInsertedAnyMoney_WhenTheySelectProduct_ThenTheProductIsNotDispensedAndInsertCoinDisplayed()
+        {
+            var product = new Product() {Name = ProductTypes.Cola, Price = 0.25m,AvailableStock = 1};
+            IList<Product> products = new List<Product>(){product};
+            _mockUsCurrencyService.Setup(s => s.IsAccepted(It.IsAny<ICoin>())).Returns(true);
+            _mockProductRepo.Setup(s => s.Products).Returns(products);
+            _mockUsCurrencyService.SetupGet(g => g.InsertedCoins).Returns(new List<ICoin>());
 
+            _vendingMachine.BuyProduct(ProductTypes.Cola);
+            
+            _vendingMachine.DispensedProduct.Should().BeNull();
+            _vendingMachine.CurrentDisplay.Should().Be(VendingResponse.Price);
+            _vendingMachine.CurrentDisplay.Should().Be(VendingResponse.InsertedCoin);
+            
+        }
+       
+        
         [Fact]
         public void GivenTheUserHasInsertedCoins_WhenTheySelectACheaperProduct_ThenTheChangeIsGiven()
         {  
@@ -119,13 +142,10 @@ namespace Muscle.Vending.Tests
 
             _mockUsCurrencyService.Setup(s => s.IsAccepted(It.IsAny<ICoin>())).Returns(true);
             _mockProductRepo.Setup(s => s.Products).Returns(products);
-            _mockUsCurrencyService.Setup(s => s.CalculcateChangeCoins(It.IsAny<decimal>())).Returns(expectedCoins);
-
-            foreach (var coin in insertedCoins)
-            {
-                _vendingMachine.InsertCoin(coin);
-
-            }
+            _mockUsCurrencyService.Setup(s => s.CalculateChangeCoins(It.IsAny<decimal>())).Returns(expectedCoins);
+            _mockUsCurrencyService.SetupGet(g => g.InsertedCoins).Returns(insertedCoins);
+            
+          
             _vendingMachine.BuyProduct(ProductTypes.Cola);
 
             _vendingMachine.ReturnSlot.Should().Equal(expectedCoins);
@@ -136,11 +156,8 @@ namespace Muscle.Vending.Tests
         {
             _mockUsCurrencyService.Setup(s => s.IsAccepted(It.IsAny<ICoin>())).Returns(true);
             var coins = new List<ICoin>(){new Coin(USCoinTypes.Dime),new Coin(USCoinTypes.Nickel)};
-
-            foreach (var coin in coins)
-            {
-                _vendingMachine.InsertCoin(coin);
-            }
+            _mockUsCurrencyService.SetupGet(g => g.InsertedCoins).Returns(coins);
+            
             _vendingMachine.RejectCoins();
             Assert.Equal(coins,_vendingMachine.ReturnSlot);
             Assert.Equal(VendingResponse.InsertedCoin,_vendingMachine.CurrentDisplay) ;
@@ -162,7 +179,7 @@ namespace Muscle.Vending.Tests
         }
 
         [Fact]
-        public void GivenThereIsNoChangeIntheMachine_ThenTheDisplayMessageShouldBeExactMoneyOnly()
+        public void GivenThereIsNoChangeInTheMachine_ThenTheDisplayMessageShouldBeExactMoneyOnly()
         {
             _mockUsCurrencyService.SetupGet(s => s.AvailableChange).Returns(new List<ICoin>());
 
