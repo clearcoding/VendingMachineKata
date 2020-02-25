@@ -6,9 +6,9 @@ namespace Muscle.Vending
     {
         public const string Accepted = "Accepted";
         public const string InsertedCoin = "Insert Coin";
-        public static string ThankYou => "Thank You";
-        public static string Price => "Price";
-        public static string SoldOut => "Sold Out";
-        public static string ExactChangeOnly => "Exact Change Only";
+        public const string ThankYou = "Thank You";
+        public const string Price = "Price";
+        public const string SoldOut = "Sold Out";
+        public const string ExactChangeOnly = "Exact Change Only";
     }
 }

@@ -48,13 +48,9 @@ namespace Muscle.Vending
         public IList<ICoin> ReturnSlot { get; private set; }
         public Product DispensedProduct { get; private set; }
 
-        private IList<ICoin> InsertedCoins
-        {
-            get => _currencyService.InsertedCoins;
-        }
+        private IList<ICoin> InsertedCoins => _currencyService.InsertedCoins;
 
-        
-        
+
         public void InsertCoin(ICoin coin)
         {
             var result = _currencyService.IsAccepted(coin);
