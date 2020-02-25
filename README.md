@@ -1,4 +1,4 @@
-#Vending Machine Kata
+# Vending Machine Kata
 
 The following is an implementation of the vending machine kata in c-sharp
 
@@ -10,10 +10,10 @@ To run the tests from cmd line:
 ```dotnet test```
 
 
-#Features
+# Features
 
 
-##Accept Coins
+## Accept Coins
 
   
 *As a vendor*  
@@ -29,7 +29,7 @@ NOTE: The temptation here will be to create Coin objects that know their value. 
   was inserted.  You will need to do something similar.  This can be simulated using strings, constants, enums,
   symbols, or something of that nature.
 
-##Select Product
+## Select Product
 
 
 *As a vendor*
@@ -42,7 +42,7 @@ checked again, it will display INSERT COINS and the current amount will be set t
 inserted then the machine displays PRICE and the price of the item and subsequent checks of the display will display
 either INSERT COINS or the current amount as appropriate.
 
-##Make Change
+# Make Change
 
 
 *As a vendor*  
@@ -52,7 +52,7 @@ either INSERT COINS or the current amount as appropriate.
 When a product is selected that costs less than the amount of money in the machine, then the remaining amount is placed
 in the coin return.
 
-##Return Coins
+## Return Coins
 
 
 *As a customer*  
@@ -62,7 +62,7 @@ in the coin return.
 When the return coins is selected, the money the customer has placed in the machine is returned and the display shows
 INSERT COIN.
 
-##Sold Out
+## Sold Out
 
 
 *As a customer*
@@ -72,7 +72,7 @@ INSERT COIN.
 When the item selected by the customer is out of stock, the machine displays SOLD OUT.  If the display is checked again,
 it will display the amount of money remaining in the machine or INSERT COIN if there is no money in the machine.
 
-##Exact Change Only
+## Exact Change Only
 
 
 *As a customer*  
