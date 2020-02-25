@@ -10,11 +10,11 @@ To run the tests from cmd line:
 ```dotnet test```
 
 
-Features
-========
+#Features
 
-Accept Coins
-------------
+
+##Accept Coins
+
   
 _As a vendor_  
 _I want a vending machine that accepts coins_  
@@ -29,8 +29,8 @@ NOTE: The temptation here will be to create Coin objects that know their value. 
   was inserted.  You will need to do something similar.  This can be simulated using strings, constants, enums,
   symbols, or something of that nature.
 
-Select Product
---------------
+##Select Product
+
 
 _As a vendor_  
 _I want customers to select products_  
@@ -42,8 +42,8 @@ checked again, it will display INSERT COINS and the current amount will be set t
 inserted then the machine displays PRICE and the price of the item and subsequent checks of the display will display
 either INSERT COINS or the current amount as appropriate.
 
-Make Change
------------
+##Make Change
+
 
 _As a vendor_  
 _I want customers to receive correct change_  
@@ -52,8 +52,8 @@ _So that they will use the vending machine again_
 When a product is selected that costs less than the amount of money in the machine, then the remaining amount is placed
 in the coin return.
 
-Return Coins
-------------
+##Return Coins
+
 
 _As a customer_  
 _I want to have my money returned_  
@@ -62,8 +62,8 @@ _So that I can change my mind about buying stuff from the vending machine_
 When the return coins is selected, the money the customer has placed in the machine is returned and the display shows
 INSERT COIN.
 
-Sold Out
---------
+##Sold Out
+
 
 _As a customer_  
 _I want to be told when the item I have selected is not available_  
@@ -72,8 +72,8 @@ _So that I can select another item_
 When the item selected by the customer is out of stock, the machine displays SOLD OUT.  If the display is checked again,
 it will display the amount of money remaining in the machine or INSERT COIN if there is no money in the machine.
 
-Exact Change Only
------------------
+##Exact Change Only
+
 
 _As a customer_  
 _I want to be told when exact change is required_  
