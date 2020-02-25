@@ -35,7 +35,7 @@ namespace Muscle.Vending.Tests
         }
 
         [Fact]
-        public void GivenNoCoinsInserted_WhenViewed_ThenCurrentDisplayIsInsertCoin()
+        public void GivenNoCoinsInserted_WhenViewed_ThenCurrentDisplayShowsInsertCoin()
         {
             _vendingMachine.CurrentDisplay.Should().Be(VendingResponse.InsertedCoin);
         }
@@ -48,14 +48,24 @@ namespace Muscle.Vending.Tests
             _vendingMachine.InsertCoin(coin);    
             _vendingMachine.CurrentDisplay.Should().Be(VendingResponse.Accepted);
         }
+
+        [Fact]
+        public void GivenAValidCoin_WhenInserted_TheCurrentServiceInsertCoinIsPassedSameCoin()
+        {
+            var coin = new Coin(USCoinTypes.Dime);
+            _mockUsCurrencyService.Setup(s => s.IsAccepted(It.IsAny<ICoin>())).Returns(true);
+            _mockUsCurrencyService.Setup(s => s.InsertCoin(It.IsAny<ICoin>()));
+            _vendingMachine.InsertCoin(coin);
+            _mockUsCurrencyService.Verify(v=>v.InsertCoin(coin));
+
+        }
+
         [Fact] 
         public void GivenAValidCoin_WhenItIsInserted_ThenTheDisplayedCurrentAmountIsCorrect()
         {
             var coin = new Coin(USCoinTypes.Dime);
             _mockUsCurrencyService.Setup(s => s.IsAccepted(It.IsAny<ICoin>())).Returns(true);
             _mockUsCurrencyService.SetupGet(s => s.InsertedCoins).Returns(new List<ICoin>(){coin});
-
-            _vendingMachine.InsertCoin(coin);
             _vendingMachine.CurrentAmount.Should().Be(coin.Value);
 
         }
@@ -182,7 +192,6 @@ namespace Muscle.Vending.Tests
         public void GivenThereIsNoChangeInTheMachine_ThenTheDisplayMessageShouldBeExactMoneyOnly()
         {
             _mockUsCurrencyService.SetupGet(s => s.AvailableChange).Returns(new List<ICoin>());
-
             _vendingMachine.CurrentDisplay.Should().Be(VendingResponse.ExactChangeOnly);
 
         }
