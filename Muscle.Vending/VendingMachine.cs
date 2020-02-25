@@ -74,8 +74,7 @@ namespace Muscle.Vending
         
         public void BuyProduct(string product)
         {
-            try
-            {
+           
                 var selectedProduct = _productRepository.Products.Single(s => s.Name == product);
                 if (selectedProduct.AvailableStock == 0)
                 {
@@ -95,12 +94,7 @@ namespace Muscle.Vending
                 }
                 _singleUseDisplay= VendingResponse.Price;
                 _currentDisplay = CurrentAmount == 0 ? VendingResponse.InsertedCoin : CurrentAmount.ToString(CultureInfo.InvariantCulture);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
+            
         }
     }
 }
