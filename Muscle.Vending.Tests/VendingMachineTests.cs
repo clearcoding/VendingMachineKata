@@ -90,7 +90,10 @@ namespace Muscle.Vending.Tests
         public static IEnumerable<object[]> SelectProductData =>
             new List<object[]>
             {
-                new object[] { new List<Product>(){new Product() {Name = ProductTypes.Cola, Price = 0.25m,AvailableStock = 1}},new List<ICoin>(){new Coin(USCoinTypes.Quarter)},ProductTypes.Cola},
+                new object[] { new List<Product>(){new Product() {Name = ProductTypes.Cola, Price = 1.00m,AvailableStock = 1}},new List<ICoin>(){new Coin(USCoinTypes.Quarter),new Coin(USCoinTypes.Quarter),new Coin(USCoinTypes.Quarter),new Coin(USCoinTypes.Quarter)},ProductTypes.Cola},
+                new object[] { new List<Product>(){new Product() {Name = ProductTypes.Chips, Price = 0.50m,AvailableStock = 1}},new List<ICoin>(){new Coin(USCoinTypes.Quarter),new Coin(USCoinTypes.Quarter)},ProductTypes.Chips},
+                new object[] { new List<Product>(){new Product() {Name = ProductTypes.Candy, Price = 0.65m,AvailableStock = 1}},new List<ICoin>(){new Coin(USCoinTypes.Quarter),new Coin(USCoinTypes.Quarter),new Coin(USCoinTypes.Nickel),new Coin(USCoinTypes.Dime)},ProductTypes.Candy}
+
             };
         [Theory]
         [MemberData(nameof (SelectProductData))]

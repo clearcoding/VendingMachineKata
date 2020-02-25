@@ -42,7 +42,7 @@ checked again, it will display INSERT COINS and the current amount will be set t
 inserted then the machine displays PRICE and the price of the item and subsequent checks of the display will display
 either INSERT COINS or the current amount as appropriate.
 
-# Make Change
+## Make Change
 
 
 *As a vendor*  
