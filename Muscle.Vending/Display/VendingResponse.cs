@@ -1,6 +1,4 @@
-using System.Collections.Generic;
-
-namespace Muscle.Vending
+namespace Muscle.Vending.Display
 {
     public static class VendingResponse
     {

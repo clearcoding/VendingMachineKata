@@ -1,12 +1,10 @@
-using System;
 using System.Collections.Generic;
-using System.Diagnostics.SymbolStore;
 using System.Globalization;
 using System.Linq;
 using FluentAssertions;
 using Moq;
-using Muscle.Vending.Coins;
 using Muscle.Vending.Currency;
+using Muscle.Vending.Display;
 using Muscle.Vending.Products;
 using Xunit;
 

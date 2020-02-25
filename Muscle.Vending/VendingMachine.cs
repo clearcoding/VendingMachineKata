@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading;
 using Muscle.Vending.Currency;
+using Muscle.Vending.Display;
 using Muscle.Vending.Products;
 
 namespace Muscle.Vending
