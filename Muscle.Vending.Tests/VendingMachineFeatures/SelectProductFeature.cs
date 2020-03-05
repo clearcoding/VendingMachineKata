@@ -23,7 +23,7 @@ namespace Muscle.Vending.Tests.VendingMachineTests
             };
         [Theory]
         [MemberData(nameof (SelectProductData))]
-        public void GivenTheUserHasInsertedTheCorrectMoney_WhenTheySelectProduct_ThenTheProductIsDispensedAndThankYouDisplayed(IList<Product> products,IList<ICoin> insertedCoins,string productType)
+        public void GivenTheUserHasInsertedTheCorrectMoney_WhenTheySelectProduct_ThenTheProductIsDispensed_AndThankYouDisplayed(IList<Product> products,IList<ICoin> insertedCoins,string productType)
         {
             
             _mockUsCurrencyService.Setup(s => s.IsAccepted(It.IsAny<ICoin>())).Returns(true);
@@ -38,7 +38,7 @@ namespace Muscle.Vending.Tests.VendingMachineTests
 
         }
         [Fact]
-        public void GivenTheUserHasNotInsertedTheCorrectMoney_WhenTheySelectProduct_ThenTheProductIsNotDispensedAndPriceDisplayed()
+        public void GivenTheUserHasNotInsertedTheCorrectMoney_WhenTheySelectProduct_ThenTheProductIsNotDispensed_AndPriceDisplayed()
         {
             var product = new Product() {Name = ProductTypes.Cola, Price = 0.25m,AvailableStock = 1};
             IList<Product> products = new List<Product>(){product};

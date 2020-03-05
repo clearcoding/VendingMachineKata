@@ -4,7 +4,7 @@ using Xunit;
 
 namespace Muscle.Vending.Tests.CurrencyServiceFeatures
 {
-    public class ReturCoinsFeature:BaseCurrencyServiceFeature
+    public class ReturnCoinsFeature:BaseCurrencyServiceFeature
     {
         [Fact]
         public void GivenSomeCoinsInserted_WhenCoinsRejected_ThenInsertedCoinsReturned_AndAvailableCoinsRemoved()
