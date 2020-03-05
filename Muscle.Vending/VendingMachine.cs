@@ -15,7 +15,8 @@ namespace Muscle.Vending
         private readonly IProductRepository _productRepository;
         private string _currentDisplay;
         private string _singleUseDisplay;
-        public VendingMachine(ICurrencyService currencyService,IProductRepository productRepository)
+
+        public VendingMachine(ICurrencyService currencyService, IProductRepository productRepository)
         {
             _currencyService = currencyService;
             _productRepository = productRepository;
@@ -35,14 +36,14 @@ namespace Muscle.Vending
                 }
                 else
                 {
-                    if ((_currencyService.AvailableChange.Count == 0) && _currentDisplay.Equals(VendingResponse.InsertedCoin))
+                    if ((_currencyService.AvailableChange.Count == 0) &&
+                        _currentDisplay.Equals(VendingResponse.InsertedCoin))
                         _currentDisplay = VendingResponse.ExactChangeOnly;
                     message = _currentDisplay;
                 }
 
                 return message;
             }
-            
         }
 
         public decimal CurrentAmount => InsertedCoins.Sum(s => s.Value);
@@ -72,30 +73,30 @@ namespace Muscle.Vending
             ReturnSlot = InsertedCoins;
             _currentDisplay = VendingResponse.InsertedCoin;
         }
-        
+
         public void BuyProduct(string product)
         {
-           
-                var selectedProduct = _productRepository.Products.Single(s => s.Name == product);
-                if (selectedProduct.AvailableStock == 0)
-                {
-                    _currentDisplay = VendingResponse.SoldOut;
-                    return;
+            var selectedProduct = _productRepository.Products.Single(s => s.Name == product);
+            if (selectedProduct.AvailableStock == 0)
+            {
+                _currentDisplay = VendingResponse.SoldOut;
+                return;
+            }
 
-                }
-                if (CurrentAmount >= selectedProduct.Price)
-                {
-                   
-                        selectedProduct.AvailableStock -- ;
-                        DispensedProduct = selectedProduct;
-                        _singleUseDisplay = VendingResponse.ThankYou;
-                        _currentDisplay = VendingResponse.InsertedCoin;
-                        ReturnSlot = _currencyService.CalculateChangeCoins(selectedProduct.Price - CurrentAmount);
-                        return;
-                }
-                _singleUseDisplay= VendingResponse.Price;
-                _currentDisplay = CurrentAmount == 0 ? VendingResponse.InsertedCoin : CurrentAmount.ToString(CultureInfo.InvariantCulture);
-            
+            if (CurrentAmount >= selectedProduct.Price)
+            {
+                selectedProduct.AvailableStock--;
+                DispensedProduct = selectedProduct;
+                _singleUseDisplay = VendingResponse.ThankYou;
+                _currentDisplay = VendingResponse.InsertedCoin;
+                ReturnSlot = _currencyService.CalculateChangeCoins(selectedProduct.Price - CurrentAmount);
+                return;
+            }
+
+            _singleUseDisplay = VendingResponse.Price;
+            _currentDisplay = CurrentAmount == 0
+                ? VendingResponse.InsertedCoin
+                : CurrentAmount.ToString(CultureInfo.InvariantCulture);
         }
     }
 }

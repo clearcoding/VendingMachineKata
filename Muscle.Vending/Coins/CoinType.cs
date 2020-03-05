@@ -6,8 +6,7 @@ namespace Muscle.Vending.Coins
         public decimal Size { get; }
         public decimal Value { get; }
 
-        
-        public CoinType(decimal weight,decimal size, decimal value)
+        public CoinType(decimal weight, decimal size, decimal value)
         {
             Weight = weight;
             Size = size;

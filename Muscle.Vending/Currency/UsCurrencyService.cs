@@ -9,9 +9,10 @@ namespace Muscle.Vending.Currency
     {
         public UsCurrencyService()
         {
-            AvailableChange  = new List<ICoin>();
+            AvailableChange = new List<ICoin>();
             InsertedCoins = new List<ICoin>();
         }
+
         private IList<CoinType> AcceptedCoins => new List<CoinType>
             {USCoinTypes.Dime, USCoinTypes.Nickel, USCoinTypes.Quarter};
 
@@ -21,6 +22,7 @@ namespace Muscle.Vending.Currency
         {
             return AcceptedCoins.Any(a => a.Size == coin.Size && a.Weight == coin.Weight);
         }
+
         public IList<ICoin> CalculateChangeCoins(decimal change)
         {
             var changeGiven = new List<ICoin>();
@@ -36,10 +38,11 @@ namespace Muscle.Vending.Currency
                     }
                 }
             }
+
             return changeGiven;
         }
 
-        public  IList<ICoin> AvailableChange { get; set; }
+        public IList<ICoin> AvailableChange { get; set; }
         public IList<ICoin> InsertedCoins { get; set; }
 
         public IList<ICoin> ReturnCoins()
@@ -48,17 +51,16 @@ namespace Muscle.Vending.Currency
             foreach (var coin in InsertedCoins)
             {
                 AvailableChange.Remove(coin);
-
             }
-            InsertedCoins  = new List<ICoin>();
+
+            InsertedCoins = new List<ICoin>();
             return returnCoins;
         }
 
         public void InsertCoin(ICoin coin)
         {
-             AvailableChange.Add(coin);
-             InsertedCoins.Add(coin);
-             
+            AvailableChange.Add(coin);
+            InsertedCoins.Add(coin);
         }
     }
 }

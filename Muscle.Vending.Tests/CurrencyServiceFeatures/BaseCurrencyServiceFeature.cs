@@ -8,7 +8,7 @@ namespace Muscle.Vending.Tests.CurrencyServiceFeatures
 
         public BaseCurrencyServiceFeature()
         {
-            _currencyService  = new UsCurrencyService();
+            _currencyService = new UsCurrencyService();
         }
     }
 }
